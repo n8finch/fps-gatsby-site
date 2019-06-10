@@ -14,16 +14,34 @@ class Repositories extends React.Component {
     super(props)
     this.state = {
       repos: [],
-      status: 'loading'
+      status: 'loading',
+      commits: ''
     }
   }
-  async componentDidMount () {
+
+  // async getCommitsForRepo() {
+
+  //   this.state.repos.forEach(function (value, index, array) {
+
+  //     if (this.state.status === "ready") {
+  //       const commits = jsonFetch(`https://api.github.com/repos/${siteConfig.githubUsername}/${this.state.repo[index]}`);
+  //       console.log(commits);
+  //     }
+
+  //   });
+
+  // }
+
+  async componentDidMount() {
     const repos = await jsonFetch(endpoint);
     if (repos.json && repos.json.length) {
       this.setState({ repos: repos.json, status: 'ready' })
+
+      // this.getCommitsForRepo();
+
     }
   }
-  render () {
+  render() {
     const { status } = this.state
     return (
       <div className={this.props.className}>
@@ -44,7 +62,7 @@ class Repositories extends React.Component {
                         Updated: {new Date(repo.updated_at).toUTCString()}
                       </div>
                       <div className="repositories__repo-star">
-                        ★ {repo.stargazers_count}
+                        {/* ★ {repo.name} */}
                       </div>
                     </div>
                     <hr />
