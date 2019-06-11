@@ -1,5 +1,4 @@
 import React from "react";
-import jsonFetch from "simple-json-fetch";
 import styled from 'styled-components'
 import siteConfig from '../../../data/siteConfig'
 
@@ -10,42 +9,78 @@ const endpoint =
 
 
 class Repositories extends React.Component {
+
   constructor(props) {
     super(props)
+
     this.state = {
       repos: [],
       status: 'loading',
-      commits: ''
+      commits: []
     }
   }
 
-  // async getCommitsForRepo() {
+  async getCommitsForRepo(repos) {
 
-  //   this.state.repos.forEach(function (value, index, array) {
+    let repoCommits = [];
 
-  //     if (this.state.status === "ready") {
-  //       const commits = jsonFetch(`https://api.github.com/repos/${siteConfig.githubUsername}/${this.state.repo[index]}`);
-  //       console.log(commits);
-  //     }
+    repos.forEach((value, index, array) => {
+      fetch(`https://api.github.com/repos/${siteConfig.githubUsername}/${value.name}/commits`)
+        .then(response => response.json())
+        .then(data => {
 
-  //   });
+          repoCommits[value.name] = data.length;
 
-  // }
+          this.setState({
+            status: 'ready',
+            commits: repoCommits
+          });
+
+
+        })
+        .catch(err => {
+          console.error(err)
+        });
+
+      console.log(repoCommits);
+      // console.log(value.name);
+      // console.log(index);
+      // console.log(array);
+
+    });
+
+  }
 
   async componentDidMount() {
-    const repos = await jsonFetch(endpoint);
-    if (repos.json && repos.json.length) {
-      this.setState({ repos: repos.json, status: 'ready' })
+    fetch(endpoint)
+      .then(response => response.json())
+      .then(data => {
+        if (data && data.length) {
+          this.setState({
+            repos: data,
+            // status: 'ready'
+          });
+          this.getCommitsForRepo(data);
+        }
+      })
+      .catch(err => {
+        console.error(err);
+      });
 
-      // this.getCommitsForRepo();
-
-    }
   }
+
+  rateCommits(commitCount) {
+
+    if (15 < commitCount) { return `${commitCount} 🔥` }
+    if (7 < commitCount && commitCount < 15) { return `${commitCount} 🥃` }
+    if (commitCount <= 7) { return `${commitCount} 😪` }
+  }
+
   render() {
     const { status } = this.state
     return (
       <div className={this.props.className}>
-        <h2>Latest repositories on Github</h2>
+        <h2>Latest Repos and Commits on Github</h2>
         {status === "loading" && <div className='repositories__loader'><Loader /></div>}
         {status === "ready" &&
           this.state.repos && (
@@ -62,7 +97,7 @@ class Repositories extends React.Component {
                         Updated: {new Date(repo.updated_at).toUTCString()}
                       </div>
                       <div className="repositories__repo-star">
-                        {/* ★ {repo.name} */}
+                        Commits: {this.rateCommits(this.state.commits[repo.name])}
                       </div>
                     </div>
                     <hr />
