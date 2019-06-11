@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'gatsby'
 import styled from 'styled-components'
-import { FaGithub, FaWordpress,  } from "react-icons/fa"
+import { FaGithub, FaWordpress, FaLightbulb } from "react-icons/fa"
 import siteConfig from '../../../data/siteConfig'
 
 const HeaderWrapper = styled.header`
@@ -32,7 +32,7 @@ const HeaderNav = styled.nav`
 const HeaderLinkGroup = styled.div`
   display: flex;
   flex-direction: row;
-` 
+`
 
 const HeaderLink = styled(Link)`
   position: relative;
@@ -49,13 +49,13 @@ const HeaderLink = styled(Link)`
   z-index: 10;
 `
 const GithubLink = styled(({ className }) => (
-  <a 
+  <a
     className={className}
     href={`https://n8finch.com`}
     target='_blank'
     rel="noopener noreferrer"
   >
-    <FaWordpress size={32} />
+    <FaLightbulb size={32} />
   </a>
 ))`
   position: relative;
@@ -68,11 +68,12 @@ const GithubLink = styled(({ className }) => (
   padding-left: 20px;
   padding-right: 20px;
   min-width: 42px;
+  text-decoration: none;
   z-index: 10;
 `
 
 class Header extends React.Component {
-  render () {
+  render() {
     const { headerLinks } = siteConfig
 
     return (

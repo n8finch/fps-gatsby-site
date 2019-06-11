@@ -44,7 +44,7 @@ class Hero extends React.Component {
 
 export default styled(Hero)`
   
-  ${p => `background-image: url('https://source.unsplash.com/featured/?developer');`}
+  ${p => `background-image: url('https://source.unsplash.com/featured/?beach');`}
   height: 70vh;
   background-attachment: fixed;
   background-position: center;

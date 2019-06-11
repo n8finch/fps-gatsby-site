@@ -73,7 +73,7 @@ class Repositories extends React.Component {
 
     if (15 < commitCount) { return `${commitCount} 🔥` }
     if (7 < commitCount && commitCount < 15) { return `${commitCount} 🥃` }
-    if (commitCount <= 7) { return `${commitCount} 😪` }
+    if (commitCount <= 7) { return `${commitCount} 🤔` }
   }
 
   render() {
